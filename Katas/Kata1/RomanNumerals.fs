@@ -16,7 +16,6 @@ let M = "M", 1000
 
 let alphabet = [I; IV; V; IX; X; XL; L; XC; C; CD; D; CM; M]
 
-
 let getGlyphFromString (romanNumeral:string) =
     let twoLetterMatch = List.tryFind (fun (letter, _) -> letter = romanNumeral.[0..1]) alphabet
     let oneLetterMatch = List.tryFind (fun (letter, _) -> letter = romanNumeral.[0..0]) alphabet
@@ -24,7 +23,6 @@ let getGlyphFromString (romanNumeral:string) =
     | Some x, _ -> x
     | None, Some x -> x
     | _ -> failwith "Invalid Numeral"
-
 
 let rec private fromRomanNumeralRecursive baseNumber (romanNumeral:string) =
     match romanNumeral.Length with
@@ -39,12 +37,11 @@ let rec private toRomanNumeralRecursive accumulatingNumeral remainingNumber =
     match remainingNumber with
        | 0 -> accumulatingNumeral
        | _ ->
-            let (s, n) = alphabet
+            let s, n = alphabet
                             |> List.where (fun (_,b)-> b <=  remainingNumber)
                             |> List.maxBy snd
             toRomanNumeralRecursive (accumulatingNumeral + s) (remainingNumber - n)
     
-
 let toRomanNumeral (number:int) =
     toRomanNumeralRecursive "" number
     
