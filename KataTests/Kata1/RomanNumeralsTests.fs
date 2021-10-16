@@ -10,7 +10,6 @@ type RomanNumeralTests() =
     static member ValidNumeralPairs
         with get() =
             [|
-                {StringForm = "I"; NumericForm = 1}
                 {StringForm ="I"; NumericForm =  1}
                 {StringForm ="II"; NumericForm =  2}
                 {StringForm ="III"; NumericForm =  3}
@@ -38,3 +37,9 @@ type RomanNumeralTests() =
     member this.``Valid roman numerals give correct results`` (testCase:RomanNumeralPair) =
         let actual = RomanNumerals.fromRomanNumeral testCase.StringForm
         actual |> should equal testCase.NumericForm
+
+    [<Theory>]
+    [<MemberData("ValidNumeralPairs")>]
+    member this.``Numbers are transformed into correct roman numerals`` (testCase:RomanNumeralPair) =
+        let actual = RomanNumerals.toRomanNumeral testCase.NumericForm
+        actual |> should equal testCase.StringForm

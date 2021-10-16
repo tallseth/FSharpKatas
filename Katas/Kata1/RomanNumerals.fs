@@ -34,3 +34,17 @@ let rec private fromRomanNumeralRecursive baseNumber (romanNumeral:string) =
         fromRomanNumeralRecursive (baseNumber + currentNumber) (romanNumeral.Substring currentSymbol.Length)
 
 let fromRomanNumeral = fromRomanNumeralRecursive 0
+
+let rec private toRomanNumeralRecursive accumulatingNumeral remainingNumber =
+    match remainingNumber with
+       | 0 -> accumulatingNumeral
+       | _ ->
+            let (s, n) = alphabet
+                            |> List.where (fun x-> (snd x) <=  remainingNumber)
+                            |> List.maxBy snd
+            toRomanNumeralRecursive (accumulatingNumeral + s) (remainingNumber - n)
+    
+
+let toRomanNumeral (number:int) =
+    toRomanNumeralRecursive "" number
+    
