@@ -1,5 +1,6 @@
 ﻿module KataTests.Kata1.RomanNumeralsTests
 
+open System
 open Katas.Kata1
 open Xunit
 open FsUnit.Xunit
@@ -30,7 +31,11 @@ type RomanNumeralTests() =
                 {StringForm ="CDII"; NumericForm =  402}
                 {StringForm ="DXXXVII"; NumericForm =  537}                
             |]
-            |> Array.map (fun x-> [|x|])
+            |> Array.map (fun x-> [|x|]) // this makes xunit happy
+
+    static member NumbersExpressableInRomanNumerals 
+        with get() :Object[][] = [|1..3999|]
+                     |> Array.map (fun x-> [|x|]) // this makes xunit happy
 
     [<Theory>]
     [<MemberData("ValidNumeralPairs")>]
@@ -43,3 +48,9 @@ type RomanNumeralTests() =
     member this.``Numbers are transformed into correct roman numerals`` (testCase:RomanNumeralPair) =
         let actual = RomanNumerals.toRomanNumeral testCase.NumericForm
         actual |> should equal testCase.StringForm
+
+    [<Theory>]
+    [<MemberData("NumbersExpressableInRomanNumerals")>]
+    member this.``Arbitrary ints round trip correctly`` (arbitrary:int) =
+        let actual = RomanNumerals.fromRomanNumeral (RomanNumerals.toRomanNumeral arbitrary)
+        actual |> should equal arbitrary
