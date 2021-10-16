@@ -54,3 +54,14 @@ type RomanNumeralTests() =
     member this.``Arbitrary ints round trip correctly`` (arbitrary:int) =
         let actual = RomanNumerals.fromRomanNumeral (RomanNumerals.toRomanNumeral arbitrary)
         actual |> should equal arbitrary
+
+    [<Fact>]
+    member this.``Invalid cases that shouldn't work, but currently do``() =
+        let strangeSeven = RomanNumerals.fromRomanNumeral "IIIIIII"
+        strangeSeven |> should equal 7
+        
+        let invalidTwentyNineHundred = RomanNumerals.fromRomanNumeral "DDMCM"
+        invalidTwentyNineHundred |> should equal 2900
+        
+        let weirdAdditionToThirteen = RomanNumerals.fromRomanNumeral "IVIX"
+        weirdAdditionToThirteen |> should equal 13
