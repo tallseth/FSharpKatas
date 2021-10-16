@@ -1,0 +1,2 @@
+# FSharpKatas
+For F# Katas
