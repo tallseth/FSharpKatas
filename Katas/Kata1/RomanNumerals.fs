@@ -18,8 +18,8 @@ let alphabet = [I; IV; V; IX; X; XL; L; XC; C; CD; D; CM; M]
 
 
 let getGlyphFromString (romanNumeral:string) =
-    let twoLetterMatch = List.tryFind (fun x -> (fst x) = romanNumeral.[0..1]) alphabet
-    let oneLetterMatch = List.tryFind (fun x -> (fst x) = romanNumeral.[0..0]) alphabet
+    let twoLetterMatch = List.tryFind (fun (letter, _) -> letter = romanNumeral.[0..1]) alphabet
+    let oneLetterMatch = List.tryFind (fun (letter, _) -> letter = romanNumeral.[0..0]) alphabet
     match (twoLetterMatch, oneLetterMatch) with
     | Some x, _ -> x
     | None, Some x -> x
@@ -40,7 +40,7 @@ let rec private toRomanNumeralRecursive accumulatingNumeral remainingNumber =
        | 0 -> accumulatingNumeral
        | _ ->
             let (s, n) = alphabet
-                            |> List.where (fun x-> (snd x) <=  remainingNumber)
+                            |> List.where (fun (_,b)-> b <=  remainingNumber)
                             |> List.maxBy snd
             toRomanNumeralRecursive (accumulatingNumeral + s) (remainingNumber - n)
     
