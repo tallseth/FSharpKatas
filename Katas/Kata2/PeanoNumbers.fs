@@ -24,3 +24,8 @@ let subtract left right =
     | Ok difference -> difference
     | Error message -> failwith message
     
+let cmp left right =
+    match innerSubtract left right with
+    | Ok Zero -> 0
+    | Ok _ -> 1
+    | Error _ -> -1

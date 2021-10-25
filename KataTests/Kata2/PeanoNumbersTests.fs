@@ -77,5 +77,32 @@ let ``subtracting into negatives throws an error``() =
     //this kind of test fails in an annoying way in F# when I write it like this.
     (fun () -> (subtract leftPeano rightPeano) |> ignore) |> should (throwWithMessage "negative number") typeof<Exception>
 
-
+[<Fact>]
+let ``compare equal peanos returns zero``() =
+    let peano = anyPeano ()
     
+    let result = cmp peano peano
+    
+    result |> should equal 0
+
+[<Fact>]
+let ``cmp returns 1 if left is bigger``() =
+    let right = anyPositiveInt ()
+    let left = right + anyPositiveInt ()
+    let leftPeano = peanoFromNumber left
+    let rightPeano = peanoFromNumber right
+    
+    let result = cmp leftPeano rightPeano
+    
+    result |> should equal 1
+
+[<Fact>]
+let ``cmp returns -1 if right is bigger``() =
+    let left = anyPositiveInt ()
+    let right = left + anyPositiveInt ()
+    let leftPeano = peanoFromNumber left
+    let rightPeano = peanoFromNumber right    
+    
+    let result = cmp leftPeano rightPeano
+    
+    result |> should equal -1
