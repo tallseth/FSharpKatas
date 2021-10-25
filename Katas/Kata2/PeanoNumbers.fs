@@ -10,14 +10,17 @@ let rec add left right =
     | Successor more ->
         add more (Successor right)
         
-let rec subtract left right =
+let rec private innerSubtract left right =
     match left, right with
     | _, Zero ->
-        left
+        Ok left
     | Successor leftRemainder, Successor rightRemainder ->
-        subtract leftRemainder rightRemainder
+        innerSubtract leftRemainder rightRemainder
     | Zero, Successor _ ->
-        failwith "negative number"
+        Error "negative number"
 
-
+let subtract left right =
+    match (innerSubtract left right) with
+    | Ok difference -> difference
+    | Error message -> failwith message
     
