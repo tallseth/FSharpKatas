@@ -25,6 +25,14 @@ let anyPositiveInt () =
     
 let anyPeano () = peanoFromNumber (anyPositiveInt())
 
+let peanoifyInputs peanoFunc leftNumber rightNumber = peanoFunc (peanoFromNumber leftNumber) (peanoFromNumber rightNumber)    
+
+let peanoifyInputsAndOutput peanoFunc leftNumber rightNumber = numberFromPeano (peanoifyInputs peanoFunc leftNumber rightNumber)
+
+let addViaPeano = peanoifyInputsAndOutput add
+let subtractViaPeano = peanoifyInputsAndOutput subtract
+let cmpViaPeano = peanoifyInputs cmp
+
 [<Fact>]
 let ``Round trip some values for sanity checking``() =
     let startingNumber = anyPositiveInt ()
@@ -38,10 +46,7 @@ let ``Add two peanos`` () =
     let right = anyPositiveInt ()
     let expectedSum = left + right
     
-    let leftPeano = peanoFromNumber left
-    let rightPeano = peanoFromNumber right
-    let actualPeanoSum = add leftPeano rightPeano
-    let actualSum = numberFromPeano actualPeanoSum
+    let actualSum = addViaPeano left right
     
     actualSum |> should equal expectedSum
 
@@ -50,11 +55,8 @@ let ``subtract two peanos`` () =
     let right = anyPositiveInt ()
     let left = right + anyPositiveInt() //making sure it's positive
     let expectedDifference = left - right
-    
-    let leftPeano = peanoFromNumber left
-    let rightPeano = peanoFromNumber right
-    let actualPeanoDifference = subtract leftPeano rightPeano
-    let actualDifference = numberFromPeano actualPeanoDifference
+
+    let actualDifference = subtractViaPeano left right
     
     actualDifference |> should equal expectedDifference
     
@@ -71,11 +73,8 @@ let ``subtracting into negatives throws an error``() =
     let left = anyPositiveInt ()
     let right = left + anyPositiveInt() //making sure it's negative
     
-    let leftPeano = peanoFromNumber left
-    let rightPeano = peanoFromNumber right
-    
     //this kind of test fails in an annoying way in F# when I write it like this.
-    (fun () -> (subtract leftPeano rightPeano) |> ignore) |> should (throwWithMessage "negative number") typeof<Exception>
+    (fun () -> (subtractViaPeano left right) |> ignore) |> should (throwWithMessage "negative number") typeof<Exception>
 
 [<Fact>]
 let ``compare equal peanos returns zero``() =
@@ -89,20 +88,16 @@ let ``compare equal peanos returns zero``() =
 let ``cmp returns 1 if left is bigger``() =
     let right = anyPositiveInt ()
     let left = right + anyPositiveInt ()
-    let leftPeano = peanoFromNumber left
-    let rightPeano = peanoFromNumber right
     
-    let result = cmp leftPeano rightPeano
+    let result = cmpViaPeano left right
     
     result |> should equal 1
 
 [<Fact>]
 let ``cmp returns -1 if right is bigger``() =
     let left = anyPositiveInt ()
-    let right = left + anyPositiveInt ()
-    let leftPeano = peanoFromNumber left
-    let rightPeano = peanoFromNumber right    
+    let right = left + anyPositiveInt ()  
     
-    let result = cmp leftPeano rightPeano
+    let result = cmpViaPeano left right
     
     result |> should equal -1
