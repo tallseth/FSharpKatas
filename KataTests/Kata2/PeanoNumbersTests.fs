@@ -33,6 +33,9 @@ let addViaPeano = peanoifyInputsAndOutput add
 let subtractViaPeano = peanoifyInputsAndOutput subtract
 let cmpViaPeano = peanoifyInputs cmp
 
+let smaller = anyPositiveInt ()
+let bigger = smaller + anyPositiveInt ()
+
 [<Fact>]
 let ``Round trip some values for sanity checking``() =
     let startingNumber = anyPositiveInt ()
@@ -42,23 +45,15 @@ let ``Round trip some values for sanity checking``() =
     
 [<Fact>]
 let ``Add two peanos`` () =
-    let left = anyPositiveInt ()
-    let right = anyPositiveInt ()
-    let expectedSum = left + right
+    let actualSum = addViaPeano bigger smaller
     
-    let actualSum = addViaPeano left right
-    
-    actualSum |> should equal expectedSum
+    actualSum |> should equal (bigger + smaller)
 
 [<Fact>]
 let ``subtract two peanos`` () =
-    let right = anyPositiveInt ()
-    let left = right + anyPositiveInt() //making sure it's positive
-    let expectedDifference = left - right
-
-    let actualDifference = subtractViaPeano left right
+    let actualDifference = subtractViaPeano bigger smaller
     
-    actualDifference |> should equal expectedDifference
+    actualDifference |> should equal (bigger - smaller)
     
 [<Fact>]
 let ``The zero peano is an additive identity`` () =
@@ -70,11 +65,8 @@ let ``The zero peano is an additive identity`` () =
     
 [<Fact>]
 let ``subtracting into negatives throws an error``() =
-    let left = anyPositiveInt ()
-    let right = left + anyPositiveInt() //making sure it's negative
-    
     //this kind of test fails in an annoying way in F# when I write it like this.
-    (fun () -> (subtractViaPeano left right) |> ignore) |> should (throwWithMessage "negative number") typeof<Exception>
+    (fun () -> (subtractViaPeano smaller bigger) |> ignore) |> should (throwWithMessage "negative number") typeof<Exception>
 
 [<Fact>]
 let ``compare equal peanos returns zero``() =
@@ -86,18 +78,12 @@ let ``compare equal peanos returns zero``() =
 
 [<Fact>]
 let ``cmp returns 1 if left is bigger``() =
-    let right = anyPositiveInt ()
-    let left = right + anyPositiveInt ()
-    
-    let result = cmpViaPeano left right
+    let result = cmpViaPeano bigger smaller
     
     result |> should equal 1
 
 [<Fact>]
 let ``cmp returns -1 if right is bigger``() =
-    let left = anyPositiveInt ()
-    let right = left + anyPositiveInt ()  
-    
-    let result = cmpViaPeano left right
+    let result = cmpViaPeano smaller bigger
     
     result |> should equal -1
