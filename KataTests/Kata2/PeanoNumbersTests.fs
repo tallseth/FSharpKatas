@@ -45,15 +45,11 @@ let ``Round trip some values for sanity checking``() =
     
 [<Fact>]
 let ``Add two peanos`` () =
-    let actualSum = addViaPeano bigger smaller
-    
-    actualSum |> should equal (bigger + smaller)
+    addViaPeano bigger smaller |> should equal (bigger + smaller)
 
 [<Fact>]
 let ``subtract two peanos`` () =
-    let actualDifference = subtractViaPeano bigger smaller
-    
-    actualDifference |> should equal (bigger - smaller)
+    subtractViaPeano bigger smaller |> should equal (bigger - smaller)
     
 [<Fact>]
 let ``The zero peano is an additive identity`` () =
@@ -71,19 +67,13 @@ let ``subtracting into negatives throws an error``() =
 [<Fact>]
 let ``compare equal peanos returns zero``() =
     let peano = anyPeano ()
-    
-    let result = cmp peano peano
-    
-    result |> should equal 0
+
+    cmp peano peano |> should equal 0
 
 [<Fact>]
 let ``cmp returns 1 if left is bigger``() =
-    let result = cmpViaPeano bigger smaller
-    
-    result |> should equal 1
+    cmpViaPeano bigger smaller |> should equal 1
 
 [<Fact>]
 let ``cmp returns -1 if right is bigger``() =
-    let result = cmpViaPeano smaller bigger
-    
-    result |> should equal -1
+    cmpViaPeano smaller bigger |> should equal -1
