@@ -8,6 +8,7 @@
     <ItemGroup>
       <Compile Include="Kata1\RomanNumerals.fs" />
       <Compile Include="Kata2\PeanoNumbers.fs" />
+      <Compile Include="Kata3\Elevator.fs" />
     </ItemGroup>
 
 </Project>

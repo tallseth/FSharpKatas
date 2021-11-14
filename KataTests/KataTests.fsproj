@@ -10,6 +10,7 @@
     <ItemGroup>
         <Compile Include="Kata1\RomanNumeralsTests.fs" />
         <Compile Include="Kata2\PeanoNumbersTests.fs" />
+        <Compile Include="Kata3\ElevatorTests.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 
